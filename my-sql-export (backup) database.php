@@ -23,7 +23,7 @@ function EXPORT_DATABASE($host,$user,$pass,$name,       $tables=false, $backup_n
 		for ($i = 0, $st_counter = 0; $i < $fields_amount;   $i++, $st_counter=0) {
 			while($row = $result->fetch_row())	{ //when started (and every after 100 command cycle):
 				if ($st_counter%100 == 0 || $st_counter == 0 )	{$content .= "\nINSERT INTO ".$table." VALUES";}
-					$content .= "\n(";    for($j=0; $j<$fields_amount; $j++){ $row[$j] = str_replace("\n","\\n", addslashes($row[$j]) ); if (isset($row[$j])){$content .= '"'.$row[$j].'"' ;}  else{$content .= '""';}	   if ($j<($fields_amount-1)){$content.= ',';}   }        $content .=")";
+					$content .= "\n(";    for($j=0; $j<$fields_amount; $j++){ if (isset($row[$j])){ $row[$j] = str_replace("\n","\\n", addslashes($row[$j]) ); $content .= '"'.$row[$j].'"' ;}  else{$content .= 'NULL';}	   if ($j<($fields_amount-1)){$content.= ',';}   }        $content .=")";
 				//every after 100 command cycle [or at last line] ....p.s. but should be inserted 1 cycle eariler
 				if ( (($st_counter+1)%100==0 && $st_counter!=0) || $st_counter+1==$rows_num) {$content .= ";";} else {$content .= ",";}	$st_counter=$st_counter+1;
 			}
